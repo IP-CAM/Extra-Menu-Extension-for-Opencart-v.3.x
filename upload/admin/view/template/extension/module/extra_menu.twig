@@ -1,0 +1,253 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if error_name %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_name }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+          <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+              <li><a href="#tab-before" data-toggle="tab">{{ tab_before }}</a></li>
+              <li><a href="#tab-after" data-toggle="tab">{{ tab_after }}</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-general">
+              
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-debug">{{ entry_debug }}</label>
+                <div class="col-sm-10">
+                  <select name="module_extra_menu_debug" id="input-debug" class="form-control">
+                    {% if module_extra_menu_debug %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <select name="module_extra_menu_status" id="input-status" class="form-control">
+                    {% if module_extra_menu_status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-before">
+              {% set menu_row = 1 %}
+              {% set sub_row = 1 %}
+              {% for menu in menu_before %}
+                <div class="form-group" id="menu-row{{ menu_row }}">
+                  <div class="col-sm-2">
+                    <label class="control-label">{{ entry_name }}</label>
+                    <input type="text" name="menu_before[{{ menu_row }}][name][1]" value="{{ menu.name[1] }}" class="form-control">
+                  </div>
+                  <div class="col-sm-2">
+                    <label class="control-label"><span data-toggle="tooltip" title="{{ help_page }}">{{ entry_page }}</span></label>
+                    <input type="text" name="menu_before[{{ menu_row }}][page]" value="{{ menu.page }}" class="form-control">
+                  </div>
+                  <div class="col-sm-2">
+                    <label class="control-label"><span data-toggle="tooltip" title="{{ help_parameters }}">{{ entry_parameters }}</span></label>
+                    <input type="text" name="menu_before[{{ menu_row }}][params]" value="{{ menu.params }}" class="form-control">
+                  </div>
+                  <div class="col-sm-2">
+                    <label class="control-label">{{ entry_sort_order }}</label>
+                    <input type="text" name="menu_before[{{ menu_row }}][sort_order]" value="{{ menu.sort_order }}" class="form-control">
+                  </div>
+                  <div class="col-sm-2">
+                    <button type="button" onclick="$('#menu-row{{ menu_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+                    <button id="menu-sub-button{{ menu_row }}" type="button" onclick="addSubMenu('before', {{ menu_row }});" data-toggle="tooltip" title="{{ button_sub_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+                  </div>
+                  <div id="menu-sub{{ menu_row }}" class="col-sm-12">
+                  {% if menu.children %}
+                    {% for child in menu.children %}
+                      <div class="form-group" id="menu-sub{{ menu_row }}-{{ sub_row }}">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-2">
+                          <label class="control-label">{{ entry_name }}</label>
+                          <input type="text" name="menu_before[{{ menu_row }}][children][{{ sub_row }}][name][1]" value="{{ child.name[1] }}" class="form-control">
+                        </div>
+                        <div class="col-sm-2">
+                          <label class="control-label"><span data-toggle="tooltip" title="{{ help_page }}">{{ entry_page }}</span></label>
+                          <input type="text" name="menu_before[{{ menu_row }}][children][{{ sub_row }}][page]" value="{{ child.page }}" class="form-control">
+                        </div>
+                        <div class="col-sm-2">
+                          <label class="control-label"><span data-toggle="tooltip" title="{{ help_parameters }}">{{ entry_parameters }}</span></label>
+                          <input type="text" name="menu_before[{{ menu_row }}][children][{{ sub_row }}][params]" value="{{ child.params }}" class="form-control">
+                        </div>
+                        <div class="col-sm-2">
+                          <label class="control-label">{{ entry_sort_order }}</label>
+                          <input type="text" name="menu_before[{{ menu_row }}][children][{{ sub_row }}][sort_order]" value="{{ child.sort_order }}" class="form-control">
+                        </div>
+                        <button type="button" onclick="$('#menu-sub{{ menu_row }}-{{ sub_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+                      </div>
+                    {% set sub_row = sub_row + 1 %}
+                    {% endfor %}
+                  {% endif %}
+                  </div>
+                </div>
+              {% set menu_row = menu_row + 1 %}
+              {% endfor %}
+              <button id="menu-before-button" type="button" onclick="addMenu('before');" data-toggle="tooltip" title="{{ button_menu_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+                    
+            </div>
+                    
+            <div class="tab-pane" id="tab-after">
+              {% set menu_row = 1 %}
+              {% set sub_row = 1 %}
+              {% for menu in menu_after %}
+                <div class="form-group" id="menu-row{{ menu_row }}">
+                  <div class="col-sm-2">
+                    <label class="control-label">{{ entry_name }}</label>
+                    <input type="text" name="menu_after[{{ menu_row }}][name][1]" value="{{ menu.name[1] }}" class="form-control">
+                  </div>
+                  <div class="col-sm-2">
+                    <label class="control-label"><span data-toggle="tooltip" title="{{ help_page }}">{{ entry_page }}</span></label>
+                    <input type="text" name="menu_after[{{ menu_row }}][page]" value="{{ menu.page }}" class="form-control">
+                  </div>
+                  <div class="col-sm-2">
+                    <label class="control-label"><span data-toggle="tooltip" title="{{ help_parameters }}">{{ entry_parameters }}</span></label>
+                    <input type="text" name="menu_after[{{ menu_row }}][params]" value="{{ menu.params }}" class="form-control">
+                  </div>
+                  <div class="col-sm-2">
+                    <label class="control-label">{{ entry_sort_order }}</label>
+                    <input type="text" name="menu_after[{{ menu_row }}][sort_order]" value="{{ menu.sort_order }}" class="form-control">
+                  </div>
+                  <div class="col-sm-2">
+                    <button type="button" onclick="$('#menu-row{{ menu_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+                    <button id="menu-sub-button{{ menu_row }}" type="button" onclick="addSubMenu('after', {{ menu_row }});" data-toggle="tooltip" title="{{ button_sub_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+                  </div>
+                  <div id="menu-sub{{ menu_row }}" class="col-sm-12">
+                  {% if menu.children %}
+                    {% for child in menu.children %}
+                      <div class="form-group" id="menu-sub{{ menu_row }}-{{ sub_row }}">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-2">
+                          <label class="control-label">{{ entry_name }}</label>
+                          <input type="text" name="menu_after[{{ menu_row }}][children][{{ sub_row }}][name][1]" value="{{ child.name[1] }}" class="form-control">
+                        </div>
+                        <div class="col-sm-2">
+                          <label class="control-label"><span data-toggle="tooltip" title="{{ help_page }}">{{ entry_page }}</span></label>
+                          <input type="text" name="menu_after[{{ menu_row }}][children][{{ sub_row }}][page]" value="{{ child.page }}" class="form-control">
+                        </div>
+                        <div class="col-sm-2">
+                          <label class="control-label"><span data-toggle="tooltip" title="{{ help_parameters }}">{{ entry_parameters }}</span></label>
+                          <input type="text" name="menu_after[{{ menu_row }}][children][{{ sub_row }}][params]" value="{{ child.params }}" class="form-control">
+                        </div>
+                        <div class="col-sm-2">
+                          <label class="control-label">{{ entry_sort_order }}</label>
+                          <input type="text" name="menu_after[{{ menu_row }}][children][{{ sub_row }}][sort_order]" value="{{ child.sort_order }}" class="form-control">
+                        </div>
+                        <button type="button" onclick="$('#menu-sub{{ menu_row }}-{{ sub_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+                      </div>
+                    {% set sub_row = sub_row + 1 %}
+                    {% endfor %}
+                  {% endif %}
+                  </div>
+                </div>
+              {% set menu_row = menu_row + 1 %}
+              {% endfor %}
+              <button id="menu-after-button" type="button" onclick="addMenu('after');" data-toggle="tooltip" title="{{ button_menu_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+                    
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    menu_row = {{ menu_row }};
+    sub_row = {{ sub_row }};
+    function addMenu(type) {
+        html  = '<div class="form-group" id="menu-row'+menu_row+'">';
+        html  += '    <div class="col-sm-2">';
+        html  += '      <label class="control-label">{{ entry_name }}</label>';
+        html  += '      <input type="text" name="menu_'+type+'['+menu_row+'][name][1]" value="" class="form-control">';
+        html  += '    </div>';
+        html  += '    <div class="col-sm-2">';
+        html  += '      <label class="control-label"><span data-toggle="tooltip" title="{{ help_page }}">{{ entry_page }}</span></label>';
+        html  += '      <input type="text" name="menu_'+type+'['+menu_row+'][page]" value="" class="form-control">';
+        html  += '    </div>';
+        html  += '    <div class="col-sm-2">';
+        html  += '      <label class="control-label"><span data-toggle="tooltip" title="{{ help_parameters }}">{{ entry_parameters }}</span></label>';
+        html  += '      <input type="text" name="menu_'+type+'['+menu_row+'][params]" value="" class="form-control">';
+        html  += '    </div>';
+        html  += '    <div class="col-sm-2">';
+        html  += '      <label class="control-label">{{ entry_sort_order }}</label>';
+        html  += '      <input type="text" name="menu_'+type+'['+menu_row+'][sort_order]" value="" class="form-control">';
+        html  += '    </div>';
+        html  += '    <div class="col-sm-2">';
+        html  += '      <button type="button" onclick="$(\'#menu-row'+menu_row+'\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+        html  += '      <button type="button" onclick="addSubMenu(\''+type+'\', '+menu_row+');" data-toggle="tooltip" title="{{ button_sub_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>';
+        html  += '    </div>';
+        html  += '  <div id="menu-sub'+menu_row+'" class="col-sm-12">';
+        html  += '  </div>';
+        html  += '</div>';
+
+	$('#menu-'+type+'-button').before(html);
+
+	menu_row++;
+    }
+    function addSubMenu(type, parent) {
+        html  = '<div class="form-group" id="menu-sub'+parent+'-'+sub_row+'">';
+        html  += '    <div class="col-sm-1"></div>';
+        html  += '    <div class="col-sm-2">';
+        html  += '      <label class="control-label">{{ entry_name }}</label>';
+        html  += '      <input type="text" name="menu_'+type+'['+parent+'][children]['+sub_row+'][name][1]" value="" class="form-control">';
+        html  += '    </div>';
+        html  += '    <div class="col-sm-2">';
+        html  += '      <label class="control-label"><span data-toggle="tooltip" title="{{ help_page }}">{{ entry_page }}</span></label>';
+        html  += '      <input type="text" name="menu_'+type+'['+parent+'][children]['+sub_row+'][page]" value="" class="form-control">';
+        html  += '    </div>';
+        html  += '    <div class="col-sm-2">';
+        html  += '      <label class="control-label"><span data-toggle="tooltip" title="{{ help_parameters }}">{{ entry_parameters }}</span></label>';
+        html  += '      <input type="text" name="menu_'+type+'['+parent+'][children]['+sub_row+'][params]" value="" class="form-control">';
+        html  += '    </div>';
+        html  += '    <div class="col-sm-2">';
+        html  += '      <label class="control-label">{{ entry_sort_order }}</label>';
+        html  += '      <input type="text" name="menu_'+type+'['+parent+'][children]['+sub_row+'][sort_order]" value="" class="form-control">';
+        html  += '    </div>';
+        html  += '    <button type="button" onclick="$(\'#menu-sub'+parent+'-'+sub_row+'\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+        html  += '</div>';
+
+	$('#menu-sub'+parent).append(html);
+
+	sub_row++;
+    }
+</script>
+{{ footer }}
