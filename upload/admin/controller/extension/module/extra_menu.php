@@ -107,7 +107,7 @@ class ControllerExtensionModuleExtraMenu extends Controller {
 	}
 
 	protected function validate() {
-		$this->log->write($this->request->post);
+		//$this->log->write($this->request->post);
 		if (!$this->user->hasPermission('modify', 'extension/module/extra_menu')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
