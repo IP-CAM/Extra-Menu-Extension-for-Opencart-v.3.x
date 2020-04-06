@@ -95,7 +95,7 @@ class ControllerExtensionModuleExtraMenu extends Controller {
 		$this->model_extension_module_extra_menu->install();
 		// add event triggers
 		$this->load->model('setting/event');
-		$this->model_setting_event->addEvent('extra_menu','catalog/view/common/menu/before','event/extra_menu/view');
+		$this->model_setting_event->addEvent('extra_menu','catalog/view/common/menu/before','extension/event/extra_menu/view');
 	}
 	
 	public function uninstall() {
