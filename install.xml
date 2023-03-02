@@ -1,8 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modification>
 	<name>Extra Menu</name>
-	<version>0.1</version>
+	<version>0.2</version>
 	<author>Joe Rothrock</author>
 	<link>https://github.com/akmjoe</link>
 	<code>opencart-extra-menu</code>
+        <file path="catalog/view/theme/default/template/common/menu.twig">
+            <operation error="skip">
+                <search><![CDATA[{% if categories %}]]>
+                </search>
+                <add position="replace"><![CDATA[{% if categories or extra_menu %}]]></add>
+            </operation>
+            <operation error="skip">
+                <search index="2"><![CDATA[{% endfor %}]]>
+                </search>
+                <add position="after"><![CDATA[{% if extra_menu_after %}
+	{% for category in extra_menu_after %}
+        {% if category.children %}
+        <li class="dropdown"><a href="{{ category.href }}" tabindex="{{ tabindex }}" class="dropdown-toggle" data-toggle="dropdown">{{ category.name }}</a>{% set tabindex = tabindex + 1 %}
+          <div class="dropdown-menu">
+            <div class="dropdown-inner">
+              <ul class="list-unstyled">
+                {% for child in category.children %}
+                <li><a href="{{ child.href }}">{{ child.name }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </li>
+        {% else %}
+        <li><a href="{{ category.href }}" tabindex="{{ tabindex }}">{{ category.name }}</a></li>{% set tabindex = tabindex + 1 %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}]]></add>
+            </operation>
+            <operation error="skip">
+                <search><![CDATA[<ul class="nav navbar-nav">]]>
+                </search>
+                <add position="after"><![CDATA[{% if extra_menu_before %}
+	{% for category in extra_menu_before %}
+        {% if category.children %}
+        <li class="dropdown"><a href="{{ category.href }}" tabindex="{{ tabindex }}" class="dropdown-toggle" data-toggle="dropdown">{{ category.name }}</a>{% set tabindex = tabindex + 1 %}
+          <div class="dropdown-menu">
+            <div class="dropdown-inner">
+              <ul class="list-unstyled">
+                {% for child in category.children %}
+                <li><a href="{{ child.href }}">{{ child.name }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </li>
+        {% else %}
+        <li><a href="{{ category.href }}" tabindex="{{ tabindex }}">{{ category.name }}</a></li>{% set tabindex = tabindex + 1 %}
+        {% endif %}
+        {% endfor %}
+	{% endif %}]]></add>
+            </operation>
+    </file>
 </modification>

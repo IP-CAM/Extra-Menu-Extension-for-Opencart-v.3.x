@@ -10,7 +10,14 @@ class controllerExtensionEventExtraMenu extends Controller {
 		$data['extra_menu_before'] = $this->model_extension_module_extra_menu->getItems(true);
 		$data['extra_menu_after'] = $this->model_extension_module_extra_menu->getItems(false);
 		$data['extra_menu'] = $this->model_extension_module_extra_menu->itemCount();
-		//$this->log->write($data['extra_menu_before']);
+		if($this->config->get('module_extra_menu_debug')) { 
+			$this->log->write('Extra menu before:');
+			$this->log->write($data['extra_menu_before']);
+			$this->log->write('Extra menu after:');
+			$this->log->write($data['extra_menu_after']);
+			$this->log->write('Extra menu flag:');
+			$this->log->write($data['extra_menu']);
+		}
     }
     
     protected function active($page = 'ignore') {

@@ -112,13 +112,13 @@ class ControllerExtensionModuleExtraMenu extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 		
-		foreach ($this->request->post['menu_before'] as $menu) {
+		if(isset($this->request->post['menu_before'])) foreach ($this->request->post['menu_before'] as $menu) {
 			foreach($menu['name'] as $language_id => $value) {
 				if ((utf8_strlen($value) < 1) || (utf8_strlen($value) > 64)) 
 					$this->error['name'] = $this->language->get('error_name');
 			}
 		}
-		foreach ($this->request->post['menu_after'] as $menu) {
+		if(isset($this->request->post['menu_after'])) foreach ($this->request->post['menu_after'] as $menu) {
 			foreach($menu['name'] as $language_id => $value) {
 				if ((utf8_strlen($value) < 1) || (utf8_strlen($value) > 64)) 
 					$this->error['name'] = $this->language->get('error_name');
