@@ -31,13 +31,13 @@ class ModelExtensionModuleExtraMenu extends Model {
 
 	
 	public function saveMenus() {
-		foreach($this->request->post['menu_before'] as $menu) {
+		if(isset($this->request->post['menu_before'])) foreach($this->request->post['menu_before'] as $menu) {
 			$this->db->query("insert into ".DB_PREFIX."extra_menu set parent = 0, position = 'before', page = '".$this->db->escape($menu['page'])."', params = '".$this->db->escape($menu['params'])."', sort_order = ".(int)$menu['sort_order']);
 			$id = $this->db->getLastId();
 			foreach($menu['name'] as $language_id => $value) {
 				$this->db->query("insert into ".DB_PREFIX."extra_menu_description set menu_id = ".(int)$id.", language_id = ".(int)$language_id.", name = '".$this->db->escape($value)."'");
 			}
-			foreach($menu['children'] as $child) {
+			if(isset($menu['children']) && is_array($menu['children'])) foreach($menu['children'] as $child) {
 				$this->db->query("insert into ".DB_PREFIX."extra_menu set parent = ".(int)$id.", position = 'before', page = '".$this->db->escape($child['page'])."', params = '".$this->db->escape($child['params'])."', sort_order = ".(int)$child['sort_order']);
 				$cid = $this->db->getLastId();
 				foreach($child['name'] as $language_id => $value) {
@@ -45,13 +45,13 @@ class ModelExtensionModuleExtraMenu extends Model {
 				}
 			}
 		}
-		foreach($this->request->post['menu_after'] as $menu) {
+		if(isset($this->request->post['menu_after'])) foreach($this->request->post['menu_after'] as $menu) {
 			$this->db->query("insert into ".DB_PREFIX."extra_menu set parent = 0, position = 'after', page = '".$this->db->escape($menu['page'])."', params = '".$this->db->escape($menu['params'])."', sort_order = ".(int)$menu['sort_order']);
 			$id = $this->db->getLastId();
 			foreach($menu['name'] as $language_id => $value) {
 				$this->db->query("insert into ".DB_PREFIX."extra_menu_description set menu_id = ".(int)$id.", language_id = ".(int)$language_id.", name = '".$this->db->escape($value)."'");
 			}
-			foreach($menu['children'] as $child) {
+			if(isset($menu['children']) && is_array($menu['children'])) foreach($menu['children'] as $child) {
 				$this->db->query("insert into ".DB_PREFIX."extra_menu set parent = ".(int)$id.", position = 'after', page = '".$this->db->escape($child['page'])."', params = '".$this->db->escape($child['params'])."', sort_order = ".(int)$child['sort_order']);
 				$cid = $this->db->getLastId();
 				foreach($child['name'] as $language_id => $value) {
